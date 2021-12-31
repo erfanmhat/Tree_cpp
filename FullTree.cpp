@@ -1,4 +1,5 @@
 #include <iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -60,6 +61,23 @@ public:
 
     bool deleteNode(int x){
         return deleteNode(root,x);
+    }
+
+    void showDecreasing(){
+        if(root == nullptr){
+            cout<<"empty! ";
+            return;
+        }
+        int result;
+        int nextTarget = INT_MAX;
+        while(true){
+            result = inorderBefore(root,nextTarget);
+            if(result != INT_MIN){
+                cout<<result<<" ";
+                nextTarget = result;
+            }
+            else break;
+        }
     }
 
 private:
@@ -174,6 +192,27 @@ private:
             return true;
         }
     }
+
+    int inorderBefore(Node* node,int x){
+        int rightInorderBefore;
+        int leftInorderBefore;
+        if(node->right != nullptr){
+            rightInorderBefore = inorderBefore(node->right,x);
+            if(rightInorderBefore != INT_MIN){
+                return rightInorderBefore;
+            }
+        }
+        if(node->data < x){
+            return node->data;
+        }
+        if(node->left != nullptr){
+            leftInorderBefore = inorderBefore(node->left,x);
+            if(leftInorderBefore != INT_MIN){
+                return leftInorderBefore;
+            }
+        }
+        return INT_MIN;
+    }
 };
 
 void menu(BTree& bTree){
@@ -184,8 +223,9 @@ void menu(BTree& bTree){
     cout<<"[3] show by inorder"<<endl;
     cout<<"[4] show by postorder"<<endl;
     cout<<"[5] show by level"<<endl;
-    cout<<"[6] search"<<endl;
-    cout<<"[7] delete"<<endl;
+    cout<<"[6] show Decreasing"<<endl;
+    cout<<"[7] search"<<endl;
+    cout<<"[8] delete"<<endl;
     cout<<"[0] exit"<<endl;
     cin>>choose;
     switch(choose){
@@ -222,6 +262,12 @@ void menu(BTree& bTree){
             break;
         }
         case '6':{
+            cout<<"[ ";
+            bTree.showDecreasing();
+            cout<<"]"<<endl;
+            break;
+        }
+        case '7':{
             int x;
             Node* result = nullptr;
             cout<<"enter a number for search : ";
@@ -234,7 +280,7 @@ void menu(BTree& bTree){
             }
             break;
         }
-        case '7':{
+        case '8':{
             int x;
             bool deleted;
             cout<<"enter a number for delete : ";
